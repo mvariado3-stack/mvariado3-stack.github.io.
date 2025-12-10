@@ -1,0 +1,2230 @@
+<ASAF html>
+    <html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ASAF - Portal de Gestión</title>
+        <style>
+            /* --- Variables de Color y Estilo --- */
+            :root {
+                /* Colores de la paleta azul (elegante) */
+                --primary-color: #409dc4;
+                --secondary-color: #5ab2da;
+                --accent-color: #2c3e50;
+                --light-blue-bg: #e4f4fd;
+                --mid-blue-bg: #c3cfe2;
+                --dark-blue-text: #34495e;
+
+                /* Colores de estado y acción */
+                --success-color: #2ecc71;
+                --danger-color: #e74c3c;
+                --info-color: #66bde6;
+                --print-color: #e67e22;
+                --edit-color: #f1c40f;
+
+                /* Color para anuncios */
+                --announcement-color: #ffb833;
+
+                /* Color para mensajes */
+                --message-color: #9b59b6;
+                /* Púrpura para mensajes/privado */
+
+                --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            /* --- Estilos Globales --- */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: var(--font-family);
+                background: linear-gradient(135deg, var(--light-blue-bg) 0%, var(--mid-blue-bg) 100%);
+                color: var(--dark-blue-text);
+                line-height: 1.6;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            header {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 1.5rem 2rem;
+                text-align: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            }
+
+            main {
+                flex-grow: 1;
+                padding: 2rem;
+                width: 100%;
+                max-width: 1300px;
+                margin: 0 auto;
+            }
+
+            /* Login */
+            #login-section {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 60vh;
+            }
+
+            .login-container {
+                background: white;
+                padding: 3rem;
+                border-radius: 12px;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+                width: 100%;
+                max-width: 450px;
+                text-align: center;
+            }
+
+            /* Botones Generales */
+            .btn {
+                background-color: var(--secondary-color);
+                color: white;
+                border: none;
+                padding: 1rem 1.8rem;
+                border-radius: 8px;
+                cursor: pointer;
+                width: 100%;
+                margin-top: 15px;
+                font-size: 1.1em;
+                font-weight: bold;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .btn:hover {
+                background-color: #348bbd;
+                transform: translateY(-2px);
+            }
+
+            .btn-logout {
+                background: var(--danger-color);
+            }
+
+            .btn-logout:hover {
+                background: #c0392b;
+            }
+
+            /* Sección de Datos */
+            #data-section {
+                display: none;
+                background: white;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .section-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.8rem;
+                border-bottom: 3px solid var(--primary-color);
+            }
+
+            .section-header h2 {
+                color: var(--primary-color);
+                font-size: 1.8em;
+            }
+
+            /* Barra de herramientas (Búsqueda, Filtros y Conteo) */
+            #toolbar {
+                padding: 15px;
+                margin-bottom: 15px;
+                background: var(--light-blue-bg);
+                border-radius: 8px;
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            }
+
+            #search-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            #utility-tools {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .btn-utility {
+                width: auto;
+                padding: 8px 15px;
+                margin-top: 0;
+                font-size: 0.9em;
+            }
+
+            #search-input {
+                width: 350px;
+                padding: 10px 18px;
+                border-radius: 25px;
+                border: 1px solid var(--secondary-color);
+                font-size: 1em;
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+                transition: border-color 0.3s ease;
+            }
+
+            #search-input:focus {
+                border-color: var(--primary-color);
+                outline: none;
+            }
+
+            #data-stats {
+                display: flex;
+                gap: 25px;
+                font-weight: bold;
+                font-size: 1em;
+                color: var(--dark-blue-text);
+            }
+
+            #filter-container {
+                display: flex;
+                gap: 15px;
+                flex-wrap: wrap;
+                padding-top: 15px;
+                border-top: 1px dashed #c3cfe2;
+            }
+
+            .filter-group {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: bold;
+                font-size: 0.95em;
+                color: var(--accent-color);
+            }
+
+            .filter-select {
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid var(--secondary-color);
+                cursor: pointer;
+                background-color: white;
+                font-size: 0.95em;
+                color: var(--dark-blue-text);
+                transition: border-color 0.3s ease;
+            }
+
+            .filter-select:hover {
+                border-color: var(--primary-color);
+            }
+
+            .filter-select:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+
+            /* Modal Base */
+            .modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(4px);
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .modal-content {
+                background: white;
+                padding: 2rem;
+                border-radius: 12px;
+                width: 90%;
+                max-width: 600px;
+                max-height: 90vh;
+                overflow-y: auto;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+                animation: fadeIn 0.3s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Formulario y Inputs */
+            label {
+                font-weight: bold;
+                margin-top: 15px;
+                display: block;
+                color: var(--dark-blue-text);
+                font-size: 0.95em;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 1em;
+                transition: border-color 0.3s ease;
+            }
+
+            input:focus,
+            select:focus,
+            textarea:focus {
+                border-color: var(--primary-color);
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(64, 157, 196, 0.2);
+            }
+
+            textarea {
+                resize: vertical;
+                min-height: 80px;
+            }
+
+            /* Tabla */
+            table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-top: 1.5rem;
+            }
+
+            th,
+            td {
+                padding: 1rem 0.8rem;
+                text-align: left;
+                font-size: 0.95em;
+                border-bottom: 1px solid var(--light-blue-bg);
+            }
+
+            th {
+                background-color: var(--primary-color);
+                color: white;
+                font-weight: bold;
+                position: sticky;
+                top: 0;
+            }
+
+            th:first-child {
+                border-top-left-radius: 8px;
+            }
+
+            th:last-child {
+                border-top-right-radius: 8px;
+            }
+
+            tbody tr:nth-child(even) {
+                background-color: #f8fcfd;
+            }
+
+            tbody tr:hover {
+                background-color: #eaf6fc;
+            }
+
+
+            /* Estilos de Foto de Perfil */
+            .profile-pic-table {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                object-fit: cover;
+                vertical-align: middle;
+                margin-right: 10px;
+                border: 2px solid var(--secondary-color);
+                transition: transform 0.2s ease;
+            }
+
+            .profile-pic-modal {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                object-fit: cover;
+                display: block;
+                margin: 0 auto 20px auto;
+                border: 4px solid var(--primary-color);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Botones de Acción en Tabla */
+            .action-btn {
+                padding: 8px 12px;
+                border-radius: 6px;
+                color: white;
+                cursor: pointer;
+                border: none;
+                margin-right: 8px;
+                font-size: 0.85em;
+                font-weight: bold;
+                transition: transform 0.2s ease, background-color 0.3s ease;
+            }
+
+            .action-btn:hover {
+                transform: translateY(-1px);
+            }
+
+            .delete-btn {
+                background-color: var(--danger-color);
+            }
+
+            .delete-btn:hover {
+                background-color: #c0392b;
+            }
+
+            .view-btn {
+                background-color: var(--info-color);
+            }
+
+            .view-btn:hover {
+                background-color: #2980b9;
+            }
+
+            .print-btn {
+                background-color: var(--print-color);
+            }
+
+            .print-btn:hover {
+                background-color: #d35400;
+            }
+
+            .edit-btn {
+                background-color: var(--edit-color);
+            }
+
+            .edit-btn:hover {
+                background-color: #e0b40e;
+            }
+
+            /* Estilos de Estado */
+            .status-tag {
+                padding: 4px 10px;
+                border-radius: 6px;
+                font-size: 0.8em;
+                font-weight: bold;
+                color: white;
+                display: inline-block;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .status-activo {
+                background-color: var(--success-color);
+            }
+
+            .status-en-revision {
+                background-color: var(--secondary-color);
+            }
+
+            .status-alta {
+                background-color: var(--danger-color);
+            }
+
+            /* Modal de Detalle (Ver Datos) */
+            .detail-row {
+                display: flex;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
+                border-bottom: 1px dashed var(--light-blue-bg);
+            }
+
+            .detail-label {
+                font-weight: bold;
+                flex: 0 0 180px;
+                color: var(--primary-color);
+                font-size: 1em;
+            }
+
+            .detail-value {
+                flex-grow: 1;
+                color: var(--dark-blue-text);
+            }
+
+            /* --- Estilos de Anuncios/Tareas --- */
+            #announcements-section {
+                background-color: white;
+                margin-top: 2rem;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .announcement-box {
+                border: 1px solid var(--announcement-color);
+                border-left: 5px solid var(--announcement-color);
+                background-color: #fffaf0;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 6px;
+                position: relative;
+            }
+
+            .announcement-box.is-task {
+                border-color: var(--message-color);
+                /* Morado para tareas */
+                border-left-color: var(--message-color);
+                background-color: #fcfaff;
+            }
+
+            .announcement-box.is-task h4 {
+                color: var(--message-color);
+            }
+
+            .announcement-actions {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+            }
+
+            .announcement-actions button {
+                padding: 5px 10px;
+                font-size: 0.8em;
+                margin-left: 5px;
+                border-radius: 4px;
+            }
+
+            .announcement-content-text {
+                white-space: pre-wrap;
+                color: var(--dark-blue-text);
+                margin-bottom: 10px;
+            }
+
+            .announcement-content-image {
+                max-width: 100%;
+                height: auto;
+                border-radius: 6px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .announcement-content-link a {
+                color: var(--primary-color);
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .countdown-timer {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: var(--danger-color);
+                margin: 10px 0;
+                padding: 5px;
+                border-radius: 4px;
+                background: rgba(231, 76, 60, 0.1);
+                display: inline-block;
+            }
+
+            .task-completed {
+                color: var(--success-color);
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+
+            /* --- Estilos de Mensajería Privada --- */
+            #inbox-section {
+                margin-top: 2rem;
+                padding: 2rem;
+                background: #f7f9fc;
+                border-radius: 12px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+                display: none;
+            }
+
+            .message-box {
+                border-bottom: 1px solid #eee;
+                padding: 15px 0;
+                display: flex;
+                gap: 15px;
+                align-items: flex-start;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            .message-box:hover {
+                background-color: #f0f3f8;
+            }
+
+            .message-box:last-child {
+                border-bottom: none;
+            }
+
+            .message-sender-photo {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid var(--message-color);
+                flex-shrink: 0;
+            }
+
+            .message-details {
+                flex-grow: 1;
+            }
+
+            .message-sender-name {
+                font-weight: bold;
+                color: var(--message-color);
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .message-content-text {
+                font-size: 0.95em;
+                color: var(--dark-blue-text);
+                max-height: 40px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .message-meta {
+                font-size: 0.8em;
+                color: #7f8c8d;
+                flex-shrink: 0;
+                padding-top: 5px;
+            }
+
+            .message-detail-file a {
+                display: block;
+                margin-top: 10px;
+                padding: 10px;
+                background: var(--light-blue-bg);
+                color: var(--primary-color);
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            /* --- ESTILOS ESPECÍFICOS PARA IMPRESIÓN MASIVA --- */
+            @media print {
+                body {
+                    background: none;
+                    color: black;
+                    margin: 0;
+                    padding: 0;
+                    font-size: 10pt;
+                }
+
+                header,
+                main,
+                #login-section,
+                .modal,
+                #data-section> :not(#print-document) {
+                    display: none !important;
+                }
+
+                #print-document {
+                    display: block !important;
+                    position: relative;
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .print-header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 10px;
+                    border-bottom: 2px solid #333;
+                }
+
+                .print-header h1 {
+                    color: #333;
+                    font-size: 18pt;
+                    margin: 0;
+                }
+
+                .print-header p {
+                    font-size: 10pt;
+                    margin: 5px 0 0 0;
+                }
+
+                .print-list-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .print-list-table th,
+                .print-list-table td {
+                    border: 1px solid #ccc;
+                    padding: 8px 10px;
+                    text-align: left;
+                    font-size: 9pt;
+                }
+
+                .print-list-table th {
+                    background-color: #f0f0f0;
+                    font-weight: bold;
+                    color: #333;
+                }
+
+                .patient-notes {
+                    font-style: italic;
+                    color: #555;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <header>
+            <h1>ASAF - Portal de Gestión</h1>
+            <p>Ministerio Cristiano Vientos del Espiritu Santo </p>
+        </header>
+
+        <main>
+
+            <section id="login-section">
+                <div class="login-container">
+                    <h2>Acceso Restringido</h2>
+                    <form id="login-form">
+                        <label>Contraseña</label>
+                        <input type="password" id="password" required>
+                        <button class="btn">Entrar</button>
+                        <p id="error-message" style="color:var(--danger-color); display:none; margin-top:10px;">
+                            Contraseña incorrecta</p>
+                        <p style="margin-top:15px; font-size:0.9em;">
+                            Roles de Acceso: Administrador | Equipo
+                        </p>
+                    </form>
+                </div>
+            </section>
+
+            <section id="data-section">
+                <div class="section-header">
+                    <h2 id="table-title">Personas Registradas</h2>
+                    <div style="display:flex; gap:10px;">
+                        <button id="add-person-btn" class="btn" style="width:auto;">Agregar Persona</button>
+                        <button id="logout-btn" class="btn btn-logout" style="width:auto;">Cerrar Sesión</button>
+                    </div>
+                </div>
+
+                <div id="toolbar">
+                    <div id="search-container">
+                        <input type="text" id="search-input" placeholder="Buscar por Nombre, ID o Email..."
+                            onkeyup="loadTable()">
+                        <div id="utility-tools">
+                            <button id="print-all-patients-btn" class="btn btn-utility print-btn"
+                                onclick="printAllPatients()" style="display:none;">
+                                🖨️ Imprimir Listado de Pacientes
+                            </button>
+                            <div id="data-stats">
+                                <span id="stat-total">Registros Totales: 0</span>
+                                <span id="stat-active">Pacientes Activos: 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="filter-container">
+                        <div class="filter-group">
+                            <label>Filtrar por Rol:</label>
+                            <select id="filter-role" class="filter-select" onchange="loadTable()">
+                                <option value="">Todos los Roles</option>
+                                <option value="Paciente">Paciente</option>
+                                <option value="Equipo">Equipo</option>
+                                <option value="Lider">Líder/Admin</option>
+                                <option value="Invitado">Invitado</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Filtrar Estado (Pacientes):</label>
+                            <select id="filter-status" class="filter-select" onchange="loadTable()">
+                                <option value="">Todos los Estados</option>
+                                <option value="activo">Activo</option>
+                                <option value="en-revision">En Revisión</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Rol</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+                            <th id="th-acciones">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body"></tbody>
+                </table>
+
+                <section id="inventory-section" style="display:none; margin-top: 2rem;">
+                    <div class="section-header" style="border-bottom-color: var(--danger-color);">
+                        <h2 style="color: var(--danger-color);"><span
+                                style="font-size: 1.2em; vertical-align: middle;">📦</span> Gestión de Inventario</h2>
+                        <div id="inv-header-actions" style="display:flex; gap:10px;">
+                            <button id="inv-export-pdf" class="btn print-btn" onclick="window.exportInventoryPDF()" style="width:auto; margin-top: 0;">Exportar PDF</button>
+                            <button id="inv-export-csv" class="btn view-btn" onclick="window.exportInventoryCSV()" style="width:auto; margin-top: 0;">Exportar CSV</button>
+                            <button id="inv-add-item" class="btn" style="width:auto; margin-top: 0;">Añadir Item</button>
+                            <span id="inv-grand-total" style="font-weight: bold; font-size: 1.2em; align-self: center;">Total: $0.00</span>
+                        </div>
+                    </div>
+                    <div id="inventory-area">
+                    </div>
+                </section>
+                <section id="inbox-section">
+                    <div class="section-header" style="border-bottom-color: var(--message-color);">
+                        <h2 style="color: var(--message-color);"><span
+                                style="font-size: 1.2em; vertical-align: middle;">📥</span> Bandeja de Entrada Privada
+                        </h2>
+                        <div id="inbox-stats" style="font-weight: bold;"></div>
+                    </div>
+                    <div id="messages-list">
+                        <p style="padding: 10px; color: #7f8c8d;">No hay mensajes nuevos.</p>
+                    </div>
+                </section>
+
+                <section id="announcements-section">
+                    <div class="section-header" style="border-bottom-color: var(--announcement-color);">
+                        <h2 style="color: var(--announcement-color);"><span
+                                style="font-size: 1.2em; vertical-align: middle;">📣</span> Anuncios y Tareas</h2>
+                        <button id="add-announcement-btn" class="btn"
+                            style="width:auto; background: var(--announcement-color); display:none;">
+                            Añadir Anuncio/Tarea
+                        </button>
+                    </div>
+                    <div id="announcements-list">
+                    </div>
+                </section>
+
+            </section>
+
+        </main>
+
+        <div id="add-modal" class="modal">
+            <div class="modal-content">
+                <h3>Registrar Nueva Persona</h3>
+                <form id="add-form">
+                    <label>Nombre Completo</label><input id="new-name" required>
+
+                    <label>Rol</label>
+                    <select id="new-role" required>
+                        <option value="Equipo">Equipo</option>
+                        <option value="Lider">Líder/Administrador</option>
+                        <option value="Invitado">Invitado</option>
+                        <option value="Paciente">Paciente</option>
+                    </select>
+
+                    <label>Foto de Perfil (Opcional)</label>
+                    <input type="file" id="new-photo" accept="image/*">
+
+                    <label>Dirección</label><input id="new-address">
+                    <label>Email</label><input type="email" id="new-email">
+                    <label>Teléfono</label><input id="new-phone" type="tel">
+                    <label>Notas</label><textarea id="new-notes" rows="2"></textarea>
+
+                    <div id="patient-fields"
+                        style="border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px; display: none;">
+                        <label style="color:var(--primary-color);">DATOS DE PACIENTE</label>
+                        <label>Adicción Principal</label><input id="new-addiction">
+                        <label>Causa de la Adicción</label><textarea id="new-cause" rows="2"></textarea>
+                        <label>Estado</label>
+                        <select id="new-status">
+                            <option value="activo">Activo</option>
+                            <option value="en-revision">En Revisión</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn">Guardar Registro</button>
+                    <button type="button" class="btn" style="background:var(--secondary-color);"
+                        onclick="closeAddModal()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <h3>Editar Registro</h3>
+                <form id="edit-form">
+                    <input type="hidden" id="edit-id">
+
+                    <label>Nombre Completo</label><input id="edit-name" required>
+
+                    <label>Rol</label>
+                    <select id="edit-role" required>
+                        <option value="Equipo">Equipo</option>
+                        <option value="Lider">Líder/Administrador</option>
+                        <option value="Invitado">Invitado</option>
+                        <option value="Paciente">Paciente</option>
+                    </select>
+
+                    <label>Foto de Perfil (Opcional)</label>
+                    <input type="file" id="edit-photo" accept="image/*">
+                    <small>Deje vacío para mantener la foto actual.</small>
+
+                    <label>Dirección</label><input id="edit-address">
+                    <label>Email</label><input type="email" id="edit-email">
+                    <label>Teléfono</label><input id="edit-phone" type="tel">
+                    <label>Notas</label><textarea id="edit-notes" rows="2"></textarea>
+
+                    <div id="edit-patient-fields"
+                        style="border-top: 1px solid #ddd; margin-top: 15px; padding-top: 15px; display: none;">
+                        <label style="color:var(--primary-color);">DATOS DE PACIENTE</label>
+                        <label>Adicción Principal</label><input id="edit-addiction">
+                        <label>Causa de la Adicción</label><textarea id="edit-cause" rows="2"></textarea>
+                        <label>Estado</label>
+                        <select id="edit-status">
+                            <option value="activo">Activo</option>
+                            <option value="en-revision">En Revisión</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="background:var(--edit-color);">Guardar Cambios</button>
+                    <button type="button" class="btn" style="background:var(--secondary-color);"
+                        onclick="closeEditModal()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-modal" class="modal">
+            <div class="modal-content">
+                <img id="view-photo" class="profile-pic-modal" alt="Foto de Perfil">
+                <h3 id="view-title" style="text-align: center;">Detalles de Persona</h3>
+                <div id="view-details-body">
+                    </div>
+                <button type="button" class="btn" style="background:var(--secondary-color); margin-top: 20px;"
+                    onclick="closeViewModal()">Cerrar</button>
+            </div>
+        </div>
+
+        <div id="announcement-modal" class="modal">
+            <div class="modal-content">
+                <h3 id="announcement-modal-title">Añadir Nuevo Anuncio/Tarea</h3>
+                <form id="announcement-form">
+                    <input type="hidden" id="announcement-id">
+
+                    <label>Título (Resumen de la Tarea/Anuncio)</label>
+                    <input id="announcement-title" required>
+
+                    <div class="announcement-input-group">
+                        <label>🏷️ Tipo de Publicación</label>
+                        <select id="announcement-type">
+                            <option value="Announcement">Anuncio General</option>
+                            <option value="Task">Solicitud de Tarea/Archivo (Solo para el Equipo)</option>
+                        </select>
+                    </div>
+
+                    <div id="task-fields"
+                        style="display: none; padding: 15px; border: 1px solid var(--message-color); border-radius: 8px; margin-top: 15px;">
+                        <label>📅 Fecha y Hora Límite de Entrega</label>
+                        <input type="datetime-local" id="task-deadline">
+                        <small>Esta fecha activa el contador en el anuncio.</small>
+
+                        <label>👤 Asignar a Rol</label>
+                        <select id="task-assigned-role">
+                            <option value="Equipo">Equipo</option>
+                            <option value="Lider">Líder/Administrador</option>
+                            <option value="Paciente">Paciente</option>
+                        </select>
+                    </div>
+
+                    <div class="announcement-input-group">
+                        <label>📅 Recordatorio Local (Opcional - Alerta en Navegador)</label>
+                        <input type="datetime-local" id="announcement-reminder-datetime">
+                        <small>Establezca una hora para recibir una alerta automática del navegador.</small>
+                    </div>
+
+                    <label>📝 Contenido del Anuncio/Detalles de Tarea</label>
+                    <textarea id="announcement-text" rows="4"></textarea>
+
+                    <label>🔗 Enlace o URL de Recurso (Opcional)</label>
+                    <input type="url" id="announcement-link">
+
+                    <label>🖼️ Imagen Adjunta (Opcional)</label>
+                    <input type="file" id="announcement-image" accept="image/*">
+                    <small>Se reemplazará la imagen si se edita y se sube un nuevo archivo.</small>
+
+                    <button type="submit" class="btn" style="background:var(--announcement-color);">Guardar</button>
+                    <button type="button" class="btn" style="background:var(--secondary-color);"
+                        onclick="closeAnnouncementModal()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="send-file-modal" class="modal">
+            <div class="modal-content">
+                <h3>Enviar Archivo/Mensaje</h3>
+                <h4 id="file-task-title" style="color:var(--message-color); margin-top:10px;">Tarea: [Título de Tarea]
+                </h4>
+                <form id="send-file-form">
+                    <input type="hidden" id="file-task-id">
+                    <label>Mensaje (Opcional)</label>
+                    <textarea id="file-message" rows="3"
+                        placeholder="Escribe un breve mensaje para el administrador..."></textarea>
+                    <label>Adjuntar Archivo/Comprobante</label>
+                    <input type="file" id="file-attachment">
+                    <small>Este archivo será enviado al administrador. Se requiere un archivo O un mensaje.</small>
+                    <button type="submit" class="btn" style="background:var(--message-color);">Enviar a
+                        Administrador</button>
+                    <button type="button" class="btn" style="background:var(--secondary-color);"
+                        onclick="closeSendFileModal()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="view-message-modal" class="modal">
+            <div class="modal-content">
+                <h3>Detalles del Mensaje Privado</h3>
+                <div id="view-message-details-body">
+                    </div>
+                <button type="button" class="btn" style="background:var(--secondary-color);"
+                    onclick="closeViewMessageModal()">Cerrar</button>
+            </div>
+        </div>
+
+        <div id="print-document" style="display:none;"></div>
+
+
+        <script>
+            // --- UTILIDADES GLOBALES ---
+            // Helper para convertir archivo a Base64
+            function convertFileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    if (!file) {
+                        return resolve(null);
+                    }
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = (error) => reject(error);
+                });
+            }
+
+            // Función auxiliar para obtener una persona por ID
+            function getPersonById(id) {
+                return people.find(p => p.id === id);
+            }
+
+            // Función auxiliar para formatear la fecha
+            function formatDate(dateString) {
+                if (!dateString) return '-';
+                try {
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    return new Date(dateString).toLocaleDateString('es-ES', options);
+                } catch (e) {
+                    return dateString; // Fallback
+                }
+            }
+
+            // Base64 completo para un icono de usuario genérico (Arreglado)
+            const DEFAULT_PHOTO_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNhZGJkZWYiIGQ9Ik0xMiAwQzUuMzcgMCAwIDUuMzcgMCAxMnM1LjM3IDEyIDEyIDEyczEyLTUuMzcgMTItMTJTMTguNjMgMCAxMiAwem0wIDZjMi4yMSAwIDQgMS43OSA0IDRzLTEuNzkgNC00IDRzLTQtMS43OS00LTRzMS43OS00IDQtNHptMCAxNGMtMi42NyAwLTUuMzMgMi4wMS04IDIuMDFjLjE0LTIuMjcgNC00LjY5IDgtNC42OXM3Ljg2IDIuNDIgOCAwYzIuNjctLjAxIDUuMzMtMi4wMSA4LTItMTI...';
+
+            // --- LÓGICA DE PERSISTENCIA Y DATOS (BLOQUE 1 - REEMPLAZAR) ---
+
+            // 1. Funciones de Guardado (Save)
+            function savePeople() { localStorage.setItem('people', JSON.stringify(people)); }
+            function saveAnnouncements() { localStorage.setItem('announcements', JSON.stringify(announcements)); }
+            function savePrivateMessages() { localStorage.setItem('privateMessages', JSON.stringify(privateMessages)); }
+            function saveInventory() {
+                // Solo guarda el objeto __ASAF_INVENTORY que ya está definido más abajo
+                localStorage.setItem('inventory', JSON.stringify(window.__ASAF_INVENTORY));
+            }
+
+            // 2. Inicialización de Variables (Load from localStorage or use default)
+
+            // Datos de ejemplo predeterminados si no hay nada guardado
+            const defaultPeople = [
+                { id: "A-001", role: "Lider", name: "Administrador Global", address: "Global", email: "admin@asaf.org", phone: "555-1000", notes: "Cuenta de Administrador Principal", dateJoined: '2025-01-01', profilePhoto: DEFAULT_PHOTO_URL, addiction: '', cause: '', status: '' },
+                { id: "E-001", role: "Equipo", name: "Miembro del Equipo A", address: "Equipo A", email: "equipoa@asaf.org", phone: "555-2000", notes: "Miembro del staff.", dateJoined: '2025-02-15', profilePhoto: DEFAULT_PHOTO_URL, addiction: '', cause: '', status: '' },
+                { id: "P-001", role: "Paciente", name: "Paciente de Muestra", address: "Hab. 101", email: "paciente1@asaf.org", phone: "555-3000", notes: "Primer paciente de prueba.", dateJoined: '2025-03-01', profilePhoto: DEFAULT_PHOTO_URL, addiction: 'Alcohol', cause: 'Estrés laboral', status: 'activo' },
+            ];
+            // CARGA DE PERSONAS: Intenta obtener del almacenamiento local, si no existe, usa defaultPeople.
+            let people = JSON.parse(localStorage.getItem('people')) || defaultPeople;
+
+            let announcements = JSON.parse(localStorage.getItem('announcements')) || [
+                { id: 1, title: "Reunión de Equipo Semanal", type: "Announcement", date: '2025-03-10', deadline: null, assignedRole: "Equipo", completed: false, reminderDatetime: new Date(Date.now() + 600000).toISOString().slice(0, 16), content: { text: "El equipo directivo se reunirá mañana a las 10 a.m. en el salón principal.", link: "https://ejemplo.com/agenda", imageBase64: null } },
+                { id: 2, title: "Envío de Informe de Pacientes", type: "Task", date: '2025-03-01', deadline: new Date(Date.now() + 86400000).toISOString().slice(0, 16), assignedRole: "Equipo", completed: false, reminderDatetime: null, content: { text: "Enviar el informe de progreso de los pacientes a la dirección antes de la fecha límite.", link: null, imageBase64: null } },
+            ];
+            let privateMessages = JSON.parse(localStorage.getItem('privateMessages')) || [];
+            let notifiedAnnouncements = JSON.parse(localStorage.getItem('notifiedAnnouncements')) || [];
+
+            // --- FIN LÓGICA DE PERSISTENCIA EN DATOS PRINCIPALES ---
+
+
+            // --- CONFIGURACIÓN DE LOGIN ---
+            const ADMIN_PASSWORD = "Administrador2025";
+            const TEAM_PASSWORD = "EquipoAsaf2025";
+            let currentUserRole = null;
+            let currentUserId = null;
+
+            // --- LOGIN HANDLER ---
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById("password").value;
+                const errorMsg = document.getElementById("error-message");
+                const dataSection = document.getElementById("data-section");
+                const loginSection = document.getElementById("login-section");
+                const adminTools = document.getElementById("add-announcement-btn");
+                const inboxSection = document.getElementById("inbox-section");
+                const printAllBtn = document.getElementById("print-all-patients-btn");
+                const inventorySection = document.getElementById("inventory-section");
+
+                let previousRole = currentUserRole;
+
+                if (password === ADMIN_PASSWORD) {
+                    currentUserRole = "Administrador";
+                    currentUserId = people.find(p => p.role === "Lider")?.id || "A-001";
+                    adminTools.style.display = 'block';
+                    inboxSection.style.display = 'block';
+                    printAllBtn.style.display = 'block';
+                    inventorySection.style.display = 'block';
+                } else if (password === TEAM_PASSWORD) {
+                    currentUserRole = "Equipo";
+                    currentUserId = people.find(p => p.role === "Equipo")?.id || "E-001";
+                    adminTools.style.display = 'none';
+                    inboxSection.style.display = 'none';
+                    printAllBtn.style.display = 'block';
+                    inventorySection.style.display = 'none';
+                } else {
+                    errorMsg.style.display = "block";
+                    return;
+                }
+
+                errorMsg.style.display = "none";
+                loginSection.style.display = "none";
+                dataSection.style.display = "block";
+
+                // Funciones de carga
+                loadTable();
+                loadAnnouncements();
+
+                if (currentUserRole === "Administrador") {
+                    loadPrivateMessages();
+                    // Si el inventario tiene funciones, renderizar
+                    if (typeof _renderAll === 'function') {
+                        _renderAll();
+                    }
+                }
+
+                // Iniciar la verificación de contadores/recordatorios
+                if (currentUserRole !== previousRole) {
+                    setInterval(updateCountdowns, 1000);
+                    setInterval(checkReminders, 30000);
+                }
+            });
+
+            // --- LOGOUT HANDLER ---
+            document.getElementById("logout-btn").onclick = () => {
+                const dataSection = document.getElementById("data-section");
+                const loginSection = document.getElementById("login-section");
+                const inventorySection = document.getElementById("inventory-section");
+
+                dataSection.style.display = "none";
+                loginSection.style.display = "flex";
+                document.getElementById("password").value = "";
+                currentUserRole = null;
+                currentUserId = null;
+                document.getElementById("inbox-section").style.display = "none";
+
+                if (inventorySection) {
+                    inventorySection.style.display = "none";
+                }
+            };
+
+            // ----------------------------------------
+            // --- LÓGICA CRUD PERSONAS Y TABLA ---
+            // ----------------------------------------
+
+            // Función para obtener el siguiente ID secuencial
+            function getNextId(role) {
+                const prefix = role.charAt(0).toUpperCase();
+                const rolePeople = people.filter(p => p.role.charAt(0).toUpperCase() === prefix);
+                if (rolePeople.length === 0) {
+                    return `${prefix}-001`;
+                }
+                const maxIdNum = Math.max(...rolePeople.map(p => parseInt(p.id.split('-')[1] || 0)));
+                const newIdNum = maxIdNum + 1;
+                return `${prefix}-${newIdNum.toString().padStart(3, '0')}`;
+            }
+
+            // Toggle de campos de paciente
+            document.getElementById('new-role').onchange = (e) => {
+                document.getElementById('patient-fields').style.display = e.target.value === 'Paciente' ? 'block' : 'none';
+            };
+            document.getElementById('edit-role').onchange = (e) => {
+                document.getElementById('edit-patient-fields').style.display = e.target.value === 'Paciente' ? 'block' : 'none';
+            };
+
+            // Llenar la tabla
+            window.loadTable = () => {
+                const tableBody = document.getElementById("data-table-body");
+                const searchInput = document.getElementById("search-input");
+                const filterRole = document.getElementById("filter-role");
+                const filterStatus = document.getElementById("filter-status");
+
+                tableBody.innerHTML = '';
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedRole = filterRole.value;
+                const selectedStatus = filterStatus.value;
+                let totalRecords = 0;
+                let activePatients = 0;
+
+                const filteredPeople = people.filter(p => {
+                    const matchesSearch = p.name.toLowerCase().includes(searchTerm) || p.id.toLowerCase().includes(searchTerm) || p.email.toLowerCase().includes(searchTerm);
+                    const matchesRole = !selectedRole || p.role === selectedRole;
+                    const matchesStatus = !selectedStatus || p.status === selectedStatus;
+
+                    if (matchesSearch && matchesRole && matchesStatus) {
+                        totalRecords++;
+                        if (p.role === 'Paciente' && p.status === 'activo') {
+                            activePatients++;
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+
+                document.getElementById('stat-total').textContent = `Registros Totales: ${totalRecords}`;
+                document.getElementById('stat-active').textContent = `Pacientes Activos: ${activePatients}`;
+                document.getElementById("print-all-patients-btn").style.display = totalRecords > 0 ? 'block' : 'none';
+
+
+                filteredPeople.forEach(p => {
+                    const row = document.createElement('tr');
+                    const isAdmin = currentUserRole === "Administrador";
+
+                    const nameWithPhoto = `
+                        <img src="${p.profilePhoto || DEFAULT_PHOTO_URL}" class="profile-pic-table" alt="Foto">
+                        ${p.name}
+                    `;
+
+                    let statusDisplay = '-';
+                    if (p.role === 'Paciente' && p.status) {
+                        statusDisplay = `<span class="status-tag status-${p.status}">${p.status.toUpperCase().replace('-', ' ')}</span>`;
+                    }
+
+                    let editButton = '';
+                    let deleteButton = '';
+
+                    // Botones de acción
+                    if (isAdmin) {
+                        editButton = `<button class="action-btn edit-btn" onclick="openEditModal('${p.id}')">Editar</button>`;
+                        deleteButton = `<button class="action-btn delete-btn" onclick="deletePerson('${p.id}')">Eliminar</button>`;
+                    } else if (currentUserRole === "Equipo" && p.id === currentUserId) {
+                        editButton = `<button class="action-btn edit-btn" onclick="openEditModal('${p.id}')">Editar Mi Perfil</button>`;
+                    }
+
+                    if (p.role === "Lider" && !isAdmin) { // No permitir que Equipo edite o borre al Admin/Líder
+                        editButton = '';
+                        deleteButton = '';
+                    }
+
+                    let actionButtons = `
+                        <button class="action-btn view-btn" onclick="viewDetails('${p.id}')">Ver Datos</button>
+                        ${editButton}
+                        <button class="action-btn print-btn" onclick="printPersonDetails('${p.id}')">Imprimir</button>
+                        ${deleteButton}
+                    `;
+
+                    row.innerHTML = `
+                        <td>${p.id}</td>
+                        <td>${p.role}</td>
+                        <td>${nameWithPhoto}</td>
+                        <td>${p.phone || '-'}</td>
+                        <td>${p.email || '-'}</td>
+                        <td>${statusDisplay}</td>
+                        <td>${actionButtons}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Modal Agregar
+            window.closeAddModal = () => document.getElementById('add-modal').style.display = 'none';
+            document.getElementById('add-person-btn').onclick = () => {
+                if (currentUserRole !== "Administrador" && currentUserRole !== "Equipo") {
+                    alert("Acceso denegado. Solo el equipo y el administrador pueden agregar personas.");
+                    return;
+                }
+                document.getElementById('add-form').reset();
+                document.getElementById('patient-fields').style.display = 'none';
+                document.getElementById('add-modal').style.display = 'flex';
+            };
+
+            document.getElementById('add-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (currentUserRole !== "Administrador" && currentUserRole !== "Equipo") return;
+
+                const role = document.getElementById('new-role').value;
+                const newPerson = {
+                    id: getNextId(role),
+                    role: role,
+                    name: document.getElementById('new-name').value,
+                    address: document.getElementById('new-address').value,
+                    email: document.getElementById('new-email').value,
+                    phone: document.getElementById('new-phone').value,
+                    notes: document.getElementById('new-notes').value,
+                    dateJoined: new Date().toISOString().slice(0, 10),
+                    profilePhoto: DEFAULT_PHOTO_URL,
+                    addiction: '',
+                    cause: '',
+                    status: ''
+                };
+
+                if (role === 'Paciente') {
+                    newPerson.addiction = document.getElementById('new-addiction').value;
+                    newPerson.cause = document.getElementById('new-cause').value;
+                    newPerson.status = document.getElementById('new-status').value;
+                }
+
+                const photoFile = document.getElementById('new-photo').files[0];
+                if (photoFile) {
+                    try {
+                        newPerson.profilePhoto = await convertFileToBase64(photoFile);
+                    } catch (error) {
+                        console.error("Error al cargar la foto:", error);
+                        alert("Hubo un error al cargar la foto. Se usará la imagen por defecto.");
+                    }
+                }
+
+                people.push(newPerson);
+                savePeople(); // <-- Guardar los datos de persona
+                loadTable();
+                closeAddModal();
+            });
+
+
+            // Modal Editar
+            window.closeEditModal = () => document.getElementById('edit-modal').style.display = 'none';
+            window.openEditModal = (id) => {
+                const p = getPersonById(id);
+                if (!p || (currentUserRole !== "Administrador" && p.id !== currentUserId)) {
+                    alert("Acceso denegado para editar este perfil.");
+                    return;
+                }
+
+                document.getElementById('edit-id').value = p.id;
+                document.getElementById('edit-name').value = p.name;
+                document.getElementById('edit-role').value = p.role;
+                document.getElementById('edit-address').value = p.address;
+                document.getElementById('edit-email').value = p.email;
+                document.getElementById('edit-phone').value = p.phone;
+                document.getElementById('edit-notes').value = p.notes;
+
+                const isPatient = p.role === 'Paciente';
+                document.getElementById('edit-patient-fields').style.display = isPatient ? 'block' : 'none';
+
+                if (isPatient) {
+                    document.getElementById('edit-addiction').value = p.addiction || '';
+                    document.getElementById('edit-cause').value = p.cause || '';
+                    document.getElementById('edit-status').value = p.status || 'activo';
+                }
+
+                document.getElementById('edit-photo').value = ''; // Resetear campo de archivo
+                document.getElementById('edit-modal').style.display = 'flex';
+            };
+
+            document.getElementById('edit-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('edit-id').value;
+                const index = people.findIndex(p => p.id === id);
+                if (index === -1) return;
+
+                const updatedPerson = { ...people[index]
+                }; // Copia superficial
+
+                // Verificar permisos nuevamente antes de guardar (seguridad)
+                if (currentUserRole !== "Administrador" && updatedPerson.id !== currentUserId) return;
+
+
+                updatedPerson.role = document.getElementById('edit-role').value;
+                updatedPerson.name = document.getElementById('edit-name').value;
+                updatedPerson.address = document.getElementById('edit-address').value;
+                updatedPerson.email = document.getElementById('edit-email').value;
+                updatedPerson.phone = document.getElementById('edit-phone').value;
+                updatedPerson.notes = document.getElementById('edit-notes').value;
+
+                if (updatedPerson.role === 'Paciente') {
+                    updatedPerson.addiction = document.getElementById('edit-addiction').value;
+                    updatedPerson.cause = document.getElementById('edit-cause').value;
+                    updatedPerson.status = document.getElementById('edit-status').value;
+                } else {
+                    updatedPerson.addiction = '';
+                    updatedPerson.cause = '';
+                    updatedPerson.status = '';
+                }
+
+                const photoFile = document.getElementById('edit-photo').files[0];
+                if (photoFile) {
+                    try {
+                        updatedPerson.profilePhoto = await convertFileToBase64(photoFile);
+                    } catch (error) {
+                        console.error("Error al cargar la foto:", error);
+                    }
+                }
+
+                people[index] = updatedPerson;
+                savePeople(); // <-- Guardar los datos de persona
+                loadTable();
+                closeEditModal();
+            });
+
+            // --- INICIO BLOQUE 2: FUNCIÓN DE ELIMINACIÓN DE PERSONAS ---
+            // Función global para eliminar una persona (llamada desde la tabla)
+            window.deletePerson = (id) => {
+                // No permitir que un usuario se elimine a sí mismo
+                if (id === currentUserId) {
+                    alert("No puedes eliminar tu propia cuenta mientras está activa.");
+                    return;
+                }
+
+                if (currentUserRole !== "Administrador" || !confirm("¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer.")) return;
+
+                // Filtra la lista de personas para eliminar la que coincide con el ID
+                people = people.filter(p => p.id !== id);
+
+                // 1. GUARDA EL CAMBIO EN ALMACENAMIENTO LOCAL
+                savePeople();
+
+                // 2. RECÁRGA LA TABLA (ACTUALIZACIÓN VISUAL)
+                loadTable();
+
+                alert(`Registro ${id} eliminado correctamente.`);
+            };
+            // --- FIN BLOQUE 2 ---
+
+            // Modal Ver Detalles
+            window.closeViewModal = () => document.getElementById('view-modal').style.display = 'none';
+            window.viewDetails = (id) => {
+                const p = getPersonById(id);
+                if (!p) return;
+
+                document.getElementById('view-title').textContent = `Detalles de ${p.name}`;
+                const photoEl = document.getElementById('view-photo');
+                photoEl.src = p.profilePhoto || DEFAULT_PHOTO_URL;
+                photoEl.style.display = 'block';
+
+                const body = document.getElementById('view-details-body');
+                let html = `
+                    <div class="detail-row"><span class="detail-label">ID:</span><span class="detail-value">${p.id}</span></div>
+                    <div class="detail-row"><span class="detail-label">Rol:</span><span class="detail-value">${p.role}</span></div>
+                    <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${p.email || '-'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Teléfono:</span><span class="detail-value">${p.phone || '-'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Dirección:</span><span class="detail-value">${p.address || '-'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Fecha de Ingreso:</span><span class="detail-value">${formatDate(p.dateJoined)}</span></div>
+                    <div class="detail-row"><span class="detail-label">Notas:</span><span class="detail-value" style="white-space: pre-wrap;">${p.notes || '-'}</span></div>
+                `;
+
+                if (p.role === 'Paciente') {
+                    html += `
+                        <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid var(--primary-color); font-weight: bold; color: var(--primary-color);">DATOS DE PACIENTE</div>
+                        <div class="detail-row"><span class="detail-label">Estado:</span><span class="detail-value">${p.status ? p.status.toUpperCase().replace('-', ' ') : '-'}</span></div>
+                        <div class="detail-row"><span class="detail-label">Adicción:</span><span class="detail-value">${p.addiction || '-'}</span></div>
+                        <div class="detail-row"><span class="detail-label">Causa:</span><span class="detail-value" style="white-space: pre-wrap;">${p.cause || '-'}</span></div>
+                    `;
+                }
+
+                body.innerHTML = html;
+                document.getElementById('view-modal').style.display = 'flex';
+            };
+
+            // ----------------------------------------
+            // --- LÓGICA DE IMPRESIÓN (INDIVIDUAL) ---
+            // ----------------------------------------
+            window.printPersonDetails = (id) => {
+                if (currentUserRole !== "Administrador" && currentUserRole !== "Equipo") {
+                    alert("Acceso denegado. Solo el equipo y el administrador pueden imprimir.");
+                    return;
+                }
+
+                const p = getPersonById(id);
+                if (!p) return;
+
+                const printContent = document.getElementById('print-document');
+                if (!printContent) return alert("Error de impresión: Elemento no encontrado.");
+
+                let patientDetails = '';
+                if (p.role === 'Paciente') {
+                    patientDetails = `
+                        <h3 style="margin-top: 15px; color: var(--primary-color);">Datos Clínicos</h3>
+                        <p><strong>Estado:</strong> ${p.status ? p.status.toUpperCase().replace('-', ' ') : '-'}</p>
+                        <p><strong>Adicción:</strong> ${p.addiction || '-'}</p>
+                        <p><strong>Causa:</strong> ${p.cause || '-'}</p>
+                    `;
+                }
+
+                const htmlContent = `
+                    <div class="print-header">
+                        <h1>ASAF - Ficha de Registro</h1>
+                        <p>Detalles de Persona: ${p.role}</p>
+                    </div>
+                    <div style="padding: 10px 20px;">
+                        <img src="${p.profilePhoto || DEFAULT_PHOTO_URL}" style="width: 80px; height: 80px; border-radius: 50%; float: right; margin: 0 0 10px 15px; border: 2px solid #34495e;">
+                        <h2>${p.name} (${p.id})</h2>
+                        <p><strong>Fecha de Ingreso:</strong> ${formatDate(p.dateJoined)}</p>
+                        <p><strong>Email:</strong> ${p.email || '-'}</p>
+                        <p><strong>Teléfono:</strong> ${p.phone || '-'}</p>
+                        <p><strong>Dirección:</strong> ${p.address || '-'}</p>
+                        ${patientDetails}
+                        <hr style="margin: 15px 0;">
+                        <h3>Notas Internas</h3>
+                        <p class="patient-notes">${p.notes || 'Sin notas'}</p>
+                        <div style="margin-top: 30px; font-size: 0.8em; text-align: center;">Documento generado el ${new Date().toLocaleDateString()}</div>
+                    </div>
+                `;
+
+                printContent.innerHTML = htmlContent;
+                window.print();
+            };
+
+
+            // ----------------------------------------
+            // --- LÓGICA DE IMPRESIÓN DE LISTADO (MASIVO) ---
+            // ----------------------------------------
+            window.printAllPatients = () => {
+                if (currentUserRole !== "Administrador" && currentUserRole !== "Equipo") {
+                    alert("Acceso denegado. Solo el equipo y el administrador pueden imprimir listados.");
+                    return;
+                }
+
+                const searchInput = document.getElementById("search-input");
+                const filterStatus = document.getElementById("filter-status");
+
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedStatus = filterStatus.value;
+
+                const patients = people.filter(p => p.role === 'Paciente');
+
+                const filteredPatients = patients.filter(p => {
+                    const matchesSearch = p.name.toLowerCase().includes(searchTerm) || p.id.toLowerCase().includes(searchTerm) || p.email.toLowerCase().includes(searchTerm);
+                    const matchesStatus = !selectedStatus || p.status === selectedStatus;
+                    return matchesSearch && matchesStatus;
+                });
+
+                if (filteredPatients.length === 0) {
+                    alert("No hay pacientes para imprimir con los filtros actuales.");
+                    return;
+                }
+
+                const printContent = document.getElementById('print-document');
+                if (!printContent) return alert("Error de impresión: Elemento no encontrado.");
+
+                let tableRows = '';
+                filteredPatients.forEach(p => {
+                    tableRows += `
+                        <tr>
+                            <td>${p.id}</td>
+                            <td>${p.name}</td>
+                            <td>${p.phone || '-'}</td>
+                            <td>${p.email || '-'}</td>
+                            <td>${p.status ? p.status.toUpperCase().replace('-', ' ') : '-'}</td>
+                            <td class="patient-notes">${p.notes || 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+
+                const htmlContent = `
+                    <div class="print-header">
+                        <h1>ASAF - Listado de Pacientes</h1>
+                        <p>Filtros: Estado (${selectedStatus || 'Todos'}) | Búsqueda: (${searchTerm || 'Ninguna'})</p>
+                    </div>
+                    <table class="print-list-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                    <div style="margin-top: 30px; font-size: 0.8em; text-align: center;">Total de registros: ${filteredPatients.length}. Documento generado el ${new Date().toLocaleDateString()}</div>
+                `;
+
+                printContent.innerHTML = htmlContent;
+                window.print();
+            };
+
+
+            // ----------------------------------------
+            // --- MÓDULO ANUNCIOS Y TAREAS ---
+            // ----------------------------------------
+            const announcementsList = document.getElementById('announcements-list');
+            const announcementModal = document.getElementById('announcement-modal');
+            const annIdInput = document.getElementById('announcement-id');
+            const annTitleInput = document.getElementById('announcement-title');
+            const annTextInput = document.getElementById('announcement-text');
+            const annLinkInput = document.getElementById('announcement-link');
+            const annImageInput = document.getElementById('announcement-image');
+            const annReminderDatetimeInput = document.getElementById('announcement-reminder-datetime');
+            const taskDeadlineInput = document.getElementById('task-deadline');
+            const taskAssignedRoleSelect = document.getElementById('task-assigned-role');
+            const announcementTypeSelect = document.getElementById('announcement-type');
+
+            window.closeAnnouncementModal = () => announcementModal.style.display = 'none';
+
+            announcementTypeSelect.onchange = (e) => {
+                document.getElementById('task-fields').style.display = e.target.value === 'Task' ? 'block' : 'none';
+            };
+
+            /**
+             * Renderiza la lista de anuncios y tareas.
+             */
+            window.loadAnnouncements = () => {
+                announcementsList.innerHTML = '';
+                const isAdmin = currentUserRole === "Administrador";
+
+                let filteredAnnouncements = announcements.filter(a => {
+                    // Filtro: Solo mostrar al rol asignado o al administrador
+                    if (isAdmin) return true;
+
+                    // Si es un anuncio general, todos lo ven
+                    if (a.type === 'Announcement') return true;
+
+                    // Si es una tarea, solo lo ve el rol asignado
+                    return a.assignedRole === currentUserRole;
+                });
+
+                // Ordenar: Tareas pendientes primero, luego anuncios, luego completadas.
+                filteredAnnouncements.sort((a, b) => {
+                    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                    if (a.type === 'Task' && b.type === 'Announcement') return -1;
+                    if (a.type === 'Announcement' && b.type === 'Task') return 1;
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+
+                if (filteredAnnouncements.length === 0) {
+                    announcementsList.innerHTML = '<p style="padding: 10px; color: #7f8c8d;">No hay anuncios o tareas disponibles para tu rol.</p>';
+                    return;
+                }
+
+                filteredAnnouncements.forEach(a => {
+                    const isTask = a.type === 'Task';
+                    const boxClass = `announcement-box ${isTask ? 'is-task' : ''} ${a.completed ? 'task-completed-bg' : ''}`;
+                    let contentHTML = '';
+                    let taskControls = '';
+
+                    // Controles de Admin (Editar/Eliminar)
+                    let actions = isAdmin ? `
+                        <div class="announcement-actions">
+                            <button class="action-btn edit-btn" onclick="openAnnouncementModal(${a.id})">Editar</button>
+                            <button class="action-btn delete-btn" onclick="deleteAnnouncement(${a.id})">Eliminar</button>
+                        </div>
+                    ` : '';
+
+                    let metaHTML = `
+                        <p style="font-size:0.9em; color:#7f8c8d;">
+                            Publicado: ${formatDate(a.date)} | Asignado a: <strong>${a.assignedRole || 'Todos'}</strong>
+                        </p>
+                    `;
+
+                    if (isTask && a.completed) {
+                        taskControls = '<span class="task-completed">✅ TAREA COMPLETADA</span>';
+                    }
+
+                    if (isTask && !a.completed) {
+                        // Temporizador
+                        const countdownId = `countdown-${a.id}`;
+                        taskControls += `<p class="countdown-timer" id="${countdownId}">Calculando tiempo restante...</p>`;
+
+                        // Botón de envío de archivo
+                        // Permitir el envío de archivo (visible para el rol asignado o el equipo si es global)
+                        const showSendButton = !a.completed && (a.assignedRole === currentUserRole || (a.assignedRole === 'Equipo' && currentUserRole === 'Equipo'));
+                        if (showSendButton) {
+                            taskControls += `<button class="action-btn view-btn" style="background: var(--message-color); margin-top: 10px;" onclick="openSendFileModal(${a.id}, '${a.title}')">Enviar Archivo/Comprobante</button>`;
+                        }
+                    }
+
+                    // Botón de completar tarea (Solo Admin)
+                    if (isTask && !a.completed) {
+                        if (currentUserRole === "Administrador") {
+                            const completeBtn = a.completed ? '' : `<button class="action-btn view-btn" style="background: var(--success-color);" onclick="markTaskCompleted(${a.id})">Marcar como Completada</button>`;
+                            taskControls += completeBtn;
+                        }
+                    }
+
+                    // Contenido detallado
+                    if (a.content.text) {
+                        contentHTML += `<div class="announcement-content-text">${a.content.text}</div>`;
+                    }
+                    if (a.content.imageBase64) {
+                        contentHTML += `<img src="${a.content.imageBase64}" class="announcement-content-image" alt="Imagen de Anuncio">`;
+                    }
+                    if (a.content.link) {
+                        const displayLink = a.content.link.length > 50 ? a.content.link.substring(0, 50) + '...' : a.content.link;
+                        contentHTML += `<div class="announcement-content-link">Recurso adjunto: <a href="${a.content.link}" target="_blank">${displayLink}</a></div>`;
+                    }
+                    if (!contentHTML) {
+                        contentHTML = '<div class="announcement-content-text" style="color:#7f8c8d;">(Sin contenido de detalle)</div>';
+                    }
+
+                    const announcementBox = document.createElement('div');
+                    announcementBox.className = boxClass;
+                    announcementBox.innerHTML = `
+                        ${actions}
+                        <h4>${a.title} (${isTask ? 'TAREA' : 'ANUNCIO'})</h4>
+                        ${metaHTML}
+                        ${taskControls}
+                        ${contentHTML}
+                    `;
+                    announcementsList.appendChild(announcementBox);
+                });
+            };
+
+            // Contador de tiempo restante
+            function updateCountdowns() {
+                announcements.forEach(a => {
+                    if (a.type !== 'Task' || a.completed || !a.deadline) return;
+
+                    const deadline = new Date(a.deadline).getTime();
+                    const now = new Date().getTime();
+                    const distance = deadline - now;
+
+                    const timerElement = document.getElementById(`countdown-${a.id}`);
+                    if (!timerElement) return;
+
+                    if (distance < 0) {
+                        timerElement.innerHTML = "¡TIEMPO EXPIRADO!";
+                        timerElement.classList.add("task-completed");
+                        timerElement.style.color = 'var(--danger-color)';
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    timerElement.innerHTML = `TIEMPO RESTANTE: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    timerElement.classList.remove("task-completed");
+                    timerElement.style.color = distance < (1000 * 60 * 60 * 24) ? 'var(--danger-color)' : 'var(--message-color)';
+                });
+            }
+
+            /**
+             * Verifica si algún anuncio tiene una fecha de recordatorio que ha llegado.
+             */
+            function checkReminders() {
+                const now = new Date();
+                const announcementsToNotify = announcements.filter(a => a.reminderDatetime && new Date(a.reminderDatetime) <= now && !notifiedAnnouncements.includes(a.id));
+
+                if (announcementsToNotify.length > 0) {
+                    if (Notification.permission === "default") {
+                        Notification.requestPermission();
+                    }
+
+                    announcementsToNotify.forEach(a => {
+                        const message = `RECUERDA: ${a.title}`;
+                        if (Notification.permission === "granted") {
+                            new Notification("📣 ANUNCIO IMPORTANTE - ASAAF", {
+                                body: message,
+                                icon: DEFAULT_PHOTO_URL,
+                            });
+                        } else {
+                            alert(`🔔 RECORDATORIO DE ANUNCIO:\n${message}\n(${a.content.text || ''})`);
+                        }
+                        notifiedAnnouncements.push(a.id);
+                    });
+
+                    // Guardar los anuncios notificados
+                    localStorage.setItem('notifiedAnnouncements', JSON.stringify(notifiedAnnouncements));
+                }
+            }
+
+            // --- INICIO BLOQUE 3.A (MODIFICAR markTaskCompleted) ---
+            // Marcar tarea como completada
+            window.markTaskCompleted = (id) => {
+                if (currentUserRole !== "Administrador") return;
+                const task = announcements.find(a => a.id === id);
+                if (task) {
+                    task.completed = true;
+
+                    saveAnnouncements(); // Guarda el estado 'completado'
+                    loadAnnouncements(); // Recarga la vista
+                }
+            };
+            // --- FIN BLOQUE 3.A ---
+
+
+            // Lógica de modal (Editar y Nuevo)
+            window.openAnnouncementModal = (id = null) => {
+                document.getElementById('announcement-form').reset();
+                const titleEl = document.getElementById('announcement-modal-title');
+
+                if (id) {
+                    titleEl.textContent = "Editar Anuncio/Tarea";
+                    const a = announcements.find(a => a.id === id);
+                    if (!a) return;
+
+                    annIdInput.value = a.id;
+                    annTitleInput.value = a.title;
+                    annTextInput.value = a.content.text || '';
+                    annLinkInput.value = a.content.link || '';
+                    announcementTypeSelect.value = a.type;
+                    announcementTypeSelect.dispatchEvent(new Event('change')); // Para mostrar/ocultar campos de tarea
+                    taskDeadlineInput.value = a.deadline || '';
+                    taskAssignedRoleSelect.value = a.assignedRole || 'Equipo';
+                    annReminderDatetimeInput.value = a.reminderDatetime || '';
+
+                    // NOTA: La imagen existente no se muestra en el modal de edición,
+                    // solo se permite subir una nueva o dejar la existente (lógica abajo).
+                } else {
+                    titleEl.textContent = "Añadir Nuevo Anuncio/Tarea";
+                    annIdInput.value = '';
+                    announcementTypeSelect.value = 'Announcement';
+                    announcementTypeSelect.dispatchEvent(new Event('change'));
+                }
+
+                announcementModal.style.display = 'flex';
+            };
+
+            document.getElementById('add-announcement-btn').onclick = () => openAnnouncementModal();
+
+            // --- INICIO BLOQUE 3.B (MODIFICAR announcement-form submit) ---
+            document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (currentUserRole !== "Administrador") return;
+
+                const type = announcementTypeSelect.value;
+                const deadline = type === 'Task' ? taskDeadlineInput.value || null : null;
+                const assignedRole = type === 'Task' ? taskAssignedRoleSelect.value : null;
+                const id = annIdInput.value ? parseInt(annIdInput.value) : null;
+                const title = annTitleInput.value;
+                const text = annTextInput.value || null;
+                const link = annLinkInput.value || null;
+                const reminderDatetime = annReminderDatetimeInput.value || null;
+                let imageBase64 = null;
+
+                if (annImageInput.files.length > 0) {
+                    try {
+                        imageBase64 = await convertFileToBase64(annImageInput.files[0]);
+                    } catch (error) {
+                        console.error("Error al cargar la imagen:", error);
+                        alert("Hubo un error al cargar la imagen. El anuncio se guardará sin ella.");
+                    }
+                }
+
+                const content = { text, link, imageBase64 };
+
+                if (id) {
+                    const index = announcements.findIndex(a => a.id == id);
+                    if (index !== -1) {
+                        // Mantener imagen original si no se sube una nueva
+                        if (!imageBase64) content.imageBase64 = announcements[index].content.imageBase64;
+
+                        announcements[index].title = title;
+                        announcements[index].content = content;
+                        announcements[index].date = new Date().toISOString().slice(0, 10);
+                        announcements[index].reminderDatetime = reminderDatetime;
+                        announcements[index].type = type;
+                        announcements[index].deadline = deadline;
+                        announcements[index].assignedRole = assignedRole;
+                        // Si se cambia de tipo, resetear el estado de completado
+                        if (announcements[index].type !== type) {
+                            announcements[index].completed = false;
+                        }
+                    }
+                } else {
+                    const newId = announcements.length > 0 ? Math.max(...announcements.map(a => a.id)) + 1 : 1;
+                    announcements.push({ id: newId, title, type, date: new Date().toISOString().slice(0, 10), deadline, assignedRole, completed: false, reminderDatetime, content });
+                }
+
+                saveAnnouncements();
+                loadAnnouncements();
+
+                closeAnnouncementModal();
+            });
+            // --- FIN BLOQUE 3.B ---
+
+            // --- INICIO BLOQUE 3.C: ELIMINACIÓN DE ANUNCIOS ---
+            window.deleteAnnouncement = (id) => {
+                if (currentUserRole !== "Administrador" || !confirm("¿Desea eliminar este anuncio/tarea?")) return;
+                announcements = announcements.filter(a => a.id !== id);
+
+                // 1. GUARDA EL CAMBIO EN ALMACENAMIENTO LOCAL
+                saveAnnouncements();
+
+                // 2. RECÁRGA LA VISTA
+                loadAnnouncements();
+            };
+            // --- FIN BLOQUE 3.C ---
+
+
+            // ----------------------------------------
+            // --- MÓDULO MENSAJERÍA PRIVADA (Aplicar Bloque 4) ---
+            // ----------------------------------------
+            const messagesList = document.getElementById('messages-list');
+            const inboxStats = document.getElementById('inbox-stats');
+            const sendFileModal = document.getElementById('send-file-modal');
+            const fileTaskId = document.getElementById('file-task-id');
+            const fileTaskTitle = document.getElementById('file-task-title');
+            const fileMessage = document.getElementById('file-message');
+            const fileAttachment = document.getElementById('file-attachment');
+
+            window.closeSendFileModal = () => sendFileModal.style.display = 'none';
+            window.closeViewMessageModal = () => document.getElementById('view-message-modal').style.display = 'none';
+
+
+            // Abrir modal para enviar archivo
+            window.openSendFileModal = (taskId, title) => {
+                if (!currentUserId) return alert("Debe iniciar sesión para enviar archivos.");
+                fileTaskId.value = taskId;
+                fileTaskTitle.textContent = `Tarea: ${title}`;
+                document.getElementById('send-file-form').reset();
+                sendFileModal.style.display = 'flex';
+            };
+
+
+            // --- INICIO BLOQUE 4.B (MODIFICAR send-file-form submit) ---
+            document.getElementById('send-file-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const task = announcements.find(a => a.id == fileTaskId.value);
+                if (!task) return alert("Tarea no encontrada.");
+                if (!currentUserId) return alert("Error: Usuario no logueado.");
+
+                const attachmentFile = fileAttachment.files[0];
+                let attachmentBase64 = null;
+                let attachmentFileName = attachmentFile ? attachmentFile.name : null;
+
+                if (attachmentFile) {
+                    try {
+                        attachmentBase64 = await convertFileToBase64(attachmentFile);
+                    } catch (error) {
+                        console.error("Error al cargar el archivo:", error);
+                        alert("Hubo un error al cargar el archivo. Mensaje no enviado.");
+                        return;
+                    }
+                } else if (!fileMessage.value) {
+                    return alert("Debe adjuntar un archivo o escribir un mensaje.");
+                }
+
+                const newMessage = {
+                    id: privateMessages.length > 0 ? Math.max(...privateMessages.map(m => m.id)) + 1 : 1,
+                    taskId: parseInt(fileTaskId.value),
+                    senderId: currentUserId,
+                    message: fileMessage.value || 'Sin mensaje.',
+                    attachmentBase64: attachmentBase64,
+                    attachmentFileName: attachmentFileName,
+                    timestamp: new Date().toISOString()
+                };
+
+                privateMessages.push(newMessage);
+
+                savePrivateMessages(); // <-- Guardar los mensajes
+
+                loadPrivateMessages(); // Actualiza la bandeja del administrador si está logueado
+                closeSendFileModal();
+                alert("Archivo/Mensaje enviado al Administrador.");
+            });
+            // --- FIN BLOQUE 4.B ---
+
+
+            // ----- Bandeja de Entrada (Admin) -----
+            window.loadPrivateMessages = () => {
+                messagesList.innerHTML = '';
+                const unreadCount = privateMessages.length;
+                inboxStats.textContent = `Mensajes: ${unreadCount}`;
+
+                if (privateMessages.length === 0) {
+                    messagesList.innerHTML = '<p style="padding: 10px; color: #7f8c8d;">No hay mensajes nuevos.</p>';
+                    return;
+                }
+
+                privateMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                privateMessages.forEach(m => {
+                    const sender = getPersonById(m.senderId) || { name: "Usuario Desconocido", profilePhoto: DEFAULT_PHOTO_URL };
+                    const task = announcements.find(a => a.id === m.taskId);
+                    const taskTitle = task ? `(Tarea: ${task.title})` : '';
+
+                    const messageBox = document.createElement('div');
+                    messageBox.className = 'message-box';
+                    messageBox.onclick = () => viewMessageDetails(m.id);
+                    messageBox.innerHTML = `
+                        <img src="${sender.profilePhoto}" class="message-sender-photo" alt="Foto">
+                        <div class="message-details">
+                            <span class="message-sender-name">${sender.name} ${taskTitle}</span>
+                            <div class="message-content-text">
+                                ${m.message}
+                                ${m.attachmentFileName ? `[ARCHIVO ADJUNTO: ${m.attachmentFileName}]` : ''}
+                            </div>
+                        </div>
+                        <div class="message-meta">${formatDate(m.timestamp.slice(0, 10))}</div>
+                    `;
+                    messagesList.appendChild(messageBox);
+                });
+            };
+
+            window.viewMessageDetails = (id) => {
+                const m = privateMessages.find(msg => msg.id === id);
+                if (!m) return;
+                const sender = getPersonById(m.senderId) || { name: "Usuario Desconocido", profilePhoto: DEFAULT_PHOTO_URL };
+                const task = announcements.find(a => a.id === m.taskId);
+
+                let attachmentHtml = '';
+                if (m.attachmentBase64) {
+                    // Detectar tipo de archivo para el enlace de descarga (solo base64)
+                    let mimeType = m.attachmentBase64.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-+\.]+);/);
+                    mimeType = mimeType ? mimeType[1] : 'application/octet-stream';
+
+                    attachmentHtml = `
+                        <div class="message-detail-file">
+                            <h4 style="border-bottom: 1px solid var(--message-color); padding-bottom: 5px; margin-top: 15px;">Archivo Adjunto</h4>
+                            <a href="${m.attachmentBase64}" download="${m.attachmentFileName || 'archivo_adjunto'}" title="Haga clic para descargar">
+                                📥 ${m.attachmentFileName || 'Descargar Archivo'}
+                                <small style="display:block; color:#7f8c8d;">Tipo: ${mimeType}</small>
+                            </a>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('view-message-details-body').innerHTML = `
+                    <div class="detail-row"><span class="detail-label">Remitente:</span><span class="detail-value">${sender.name} (${sender.id})</span></div>
+                    <div class="detail-row"><span class="detail-label">Tarea Relacionada:</span><span class="detail-value">${task ? task.title : 'N/A'}</span></div>
+                    <div class="detail-row"><span class="detail-label">Fecha:</span><span class="detail-value">${formatDate(m.timestamp.slice(0, 10))}</span></div>
+                    <h4 style="margin-top: 15px; border-bottom: 1px solid var(--message-color); padding-bottom: 5px;">Contenido del Mensaje</h4>
+                    <p style="white-space: pre-wrap;">${m.message}</p>
+                    ${attachmentHtml}
+                    <button class="action-btn delete-btn" style="margin-top: 15px;" onclick="deleteMessage(${m.id})">Eliminar Mensaje</button>
+                `;
+                document.getElementById('view-message-modal').style.display = 'flex';
+            };
+
+            // --- INICIO BLOQUE 4.A (MODIFICAR deleteMessage) ---
+            window.deleteMessage = (id) => {
+                if (currentUserRole !== "Administrador" || !confirm("¿Desea eliminar este mensaje privado?")) return;
+                privateMessages = privateMessages.filter(m => m.id !== id);
+                savePrivateMessages();
+                closeViewMessageModal();
+                loadPrivateMessages();
+            };
+            // --- FIN BLOQUE 4.A ---
+
+
+            // ----------------------------------------
+            // --- MÓDULO INVENTARIO Y PERSISTENCIA COMPLETA (BLOQUE 5 - REEMPLAZAR) ---
+            // ----------------------------------------
+
+            // Carga el inventario desde localStorage si existe, si no, usa el objeto vacío
+            // NOTA: La función saveInventory ya está definida en el Bloque 1.
+            window.__ASAF_INVENTORY = JSON.parse(localStorage.getItem('inventory')) || { tools: [], articles: [], cleaning: [], food: [] };
+
+            // Utility functions for inventory
+            const _cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+            const _currency = (v) => `$${Number(v || 0).toFixed(2)}`;
+            const _esc = (v) => String(v || '-').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Get ID for new item
+            function inv_getNextId(cat) {
+                const arr = window.__ASAF_INVENTORY[cat] || [];
+                if (arr.length === 0) return 1;
+                return Math.max(...arr.map(i => i.id)) + 1;
+            }
+
+            // ------------------------------------------
+            // --- FUNCIONES DE PERSISTENCIA Y CRUD (Añadidas/Corregidas) ---
+            // ------------------------------------------
+
+            // Placeholder para función de guardar/editar item (debes implementarla con un modal)
+            window.inv_saveItem = (category, itemData, isNew) => {
+                if (currentUserRole !== "Administrador") return;
+
+                if (isNew) {
+                    itemData.id = inv_getNextId(category);
+                    window.__ASAF_INVENTORY[category].push(itemData);
+                } else {
+                    const index = window.__ASAF_INVENTORY[category].findIndex(i => i.id === itemData.id);
+                    if (index !== -1) {
+                        window.__ASAF_INVENTORY[category][index] = { ...window.__ASAF_INVENTORY[category][index], ...itemData };
+                    }
+                }
+
+                saveInventory(); // <-- GUARDA EL CAMBIO
+                _renderAll();    // <-- ACTUALIZA LA VISTA
+                // closeInvModal(); // (Debes definir la función del modal)
+            };
+
+            // Lógica de confirmación y eliminación de item
+            window.inv_confirmDelete = (cat, id) => {
+                if (currentUserRole !== "Administrador" || !confirm("¿Eliminar este ítem del inventario?")) return;
+
+                window.__ASAF_INVENTORY[cat] = window.__ASAF_INVENTORY[cat].filter(i => i.id !== id);
+
+                saveInventory(); // <-- GUARDA EL CAMBIO
+                _renderAll();    // <-- ACTUALIZA LA VISTA
+            };
+
+            // Placeholder para abrir modal de edición (debes implementar la lógica del modal)
+            window.inv_openEditModal = (cat, id) => {
+                if (currentUserRole !== "Administrador") return;
+                const item = window.__ASAF_INVENTORY[cat].find(i => i.id === id);
+                if (item) {
+                    console.log(`Abriendo modal de edición para: ${item.name} en ${cat}`);
+                    alert(`Abriendo edición (Admin) para: ${item.name} en ${_cap(cat)}.\nImplementa tu modal de edición aquí.`);
+                    // Aquí iría la lógica para llenar el modal con los datos de 'item'
+                    // y llamar a inv_saveItem(cat, updatedData, false) al enviar el formulario
+                }
+            };
+
+
+            // Funciones de renderizado (Replicar las existentes)
+            function _updateGrandTotal() {
+                let grandTotal = 0;
+                const categories = ['tools', 'articles', 'cleaning', 'food'];
+                categories.forEach(cat => {
+                    const categoryArray = window.__ASAF_INVENTORY[cat] || [];
+                    const total = categoryArray.reduce((acc, item) => acc + ((Number(item.qty) || 0) * (Number(item.price) || 0)), 0);
+                    grandTotal += total;
+                });
+                document.getElementById('inv-grand-total').textContent = `Total: ${_currency(grandTotal)}`;
+            }
+
+            window._renderAll = () => {
+                _buildInvPanels();
+                ['tools', 'articles', 'cleaning', 'food'].forEach(cat => _renderCat(cat));
+                _updateGrandTotal();
+            }
+
+            function _buildInvPanels() {
+                const container = document.getElementById('inventory-area');
+                if (!container) return;
+                container.innerHTML = '';
+
+                // Re-renderizar paneles si no existen o para asegurar la estructura
+                const categories = {
+                    tools: "Herramientas/Equipo",
+                    articles: "Artículos de Uso Personal",
+                    cleaning: "Limpieza",
+                    food: "Alimentos/Víveres"
+                };
+
+                Object.keys(categories).forEach(cat => {
+                    const panel = document.createElement('div');
+                    panel.className = 'inventory-panel';
+                    panel.innerHTML = `
+                        <h3 style="border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-top: 20px;">${categories[cat]}</h3>
+                        <table id="inv-table-${cat}" style="width:100%; margin-top:10px;">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Ubicación</th>
+                                    <th>Pacientes (Uso)</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unit.</th>
+                                    <th>Subtotal</th>
+                                    <th class="no-print">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" style="text-align:right;font-weight:bold; color:var(--primary-color);">Total ${categories[cat]}</td>
+                                    <td style="font-weight:bold; color:var(--primary-color);" id="inv-total-${cat}">$0.00</td>
+                                    <td class="no-print"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    `;
+                    container.appendChild(panel);
+                });
+            }
+
+            function _renderCat(cat) {
+                const tbody = document.querySelector('#inv-table-' + cat + ' tbody');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                const arr = window.__ASAF_INVENTORY[cat] || [];
+                let categoryTotal = 0;
+
+                arr.forEach(item => {
+                    const subtotal = Number((item.qty || 0) * (Number(item.price) || 0)).toFixed(2);
+                    categoryTotal += Number(subtotal);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${_esc(item.name)}</td>
+                        <td>${_esc(item.room || '-')}</td>
+                        <td>${_esc(item.patients || '-')}</td>
+                        <td>${item.qty}</td>
+                        <td>${_currency(item.price)}</td>
+                        <td>${_currency(subtotal)}</td>
+                        <td class="no-print">
+                            <button class="action-btn edit-btn" onclick="inv_openEditModal('${cat}', ${item.id})">Editar</button>
+                            <button class="action-btn delete-btn" onclick="inv_confirmDelete('${cat}', ${item.id})">Eliminar</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                document.getElementById(`inv-total-${cat}`).textContent = _currency(categoryTotal);
+            }
+
+            // Placeholder para funciones de exportación (requiere librerías externas)
+            window.exportInventoryPDF = () => { alert("Exportar a PDF no implementado: Requiere librerías externas como jsPDF o FPDF."); };
+            window.exportInventoryCSV = () => { alert("Exportar a CSV no implementado: Requiere lógica de generación de archivos CSV."); };
+
+            // Lógica de adición de Item (Simplificada, requiere modal en HTML)
+            document.getElementById('inv-add-item').onclick = () => {
+                if (currentUserRole !== "Administrador") return alert("Acceso denegado.");
+                // Esto es solo un ejemplo de lo que se haría en el futuro con un modal:
+                alert(`Abriendo modal de creación para Item. Implementa tu modal aquí.`);
+
+                // Lógica de simulación de guardado (Descomentar al implementar modal)
+                /*
+                const category = 'tools'; // Se determinaría por el modal
+                const newItem = { id: 0, name: 'Nuevo Item', room: 'Almacén', patients: 'N/A', qty: 1, price: 5.00, notes: 'Creado de prueba.' };
+                inv_saveItem(category, newItem, true);
+                */
+            };
+
+            // --- FIN BLOQUE 5 ---
+
+            // ----------------------------------------
+            // --- INICIALIZACIÓN FINAL DEL DOM ---
+            // ----------------------------------------
+            document.addEventListener("DOMContentLoaded", () => {
+                // Cargar la tabla al inicio (aunque esté oculta)
+                loadTable();
+
+                // Inicializar la estructura del inventario (puede ser movido al login si se prefiere)
+                if (typeof _buildInvPanels === 'function') {
+                    _buildInvPanels();
+                }
+
+                // Lógica de carga de datos de muestra solo si NO hay datos en localStorage
+                const storedInventory = localStorage.getItem('inventory');
+                if (!storedInventory || storedInventory === JSON.stringify({ tools: [], articles: [], cleaning: [], food: [] })) {
+                    if (window.__ASAF_INVENTORY.tools.length === 0 && window.__ASAF_INVENTORY.articles.length === 0 && window.__ASAF_INVENTORY.cleaning.length === 0 && window.__ASAF_INVENTORY.food.length === 0) {
+                        // Carga los datos de muestra originales
+                        window.__ASAF_INVENTORY.tools.push({ id: 1, name: 'Taladro', room: 'Taller', patients: '', qty: 2, price: 150, notes: 'Herramienta de uso general.' });
+                        window.__ASAF_INVENTORY.articles.push({ id: 1, name: 'Sábanas Blancas', room: 'Lavandería', patients: 'Hab. 101, 102', qty: 20, price: 15, notes: 'De repuesto.' });
+                        window.__ASAF_INVENTORY.cleaning.push({ id: 1, name: 'Detergente (Galón)', room: 'Almacén', patients: '', qty: 5, price: 8, notes: 'Para lavandería.' });
+                        window.__ASAF_INVENTORY.food.push({ id: 1, name: 'Arroz (50lb)', room: 'Cocina', patients: 'Todos', qty: 1, price: 25, notes: 'Saco grande.' });
+
+                        saveInventory(); // Guarda los datos de muestra por primera vez
+                        if (typeof _renderAll === 'function') {
+                            _renderAll();
+                        }
+                    }
+                }
+            });
+        </script>
+
+    </body>
+
+    </html>
